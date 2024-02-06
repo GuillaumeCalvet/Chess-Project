@@ -14,11 +14,15 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
+/*
+ * Scene 2/3 de l'application
+ * => Menu : choix du format de jeu souhaité
+ */
+
 public class MenuPanel extends Parent {
 	
 	StackPane root;
 	GridPane gridFormats;
-	// Button btn_1_0, btn_2_1, btn_3_0, btn_3_2, btn_5_0, btn_5_3, btn_10_0, btn_10_5, btn_15_10, btn_30_0, btn_30_20, btn_60_10;
 	Button[] buttons;
 	Client client;
 	SceneSwitchListener sceneSwitchListener;

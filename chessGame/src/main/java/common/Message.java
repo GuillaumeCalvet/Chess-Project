@@ -2,17 +2,21 @@ package common;
 
 import java.io.Serializable;
 
+/*
+ * Cette classe représente un message échangé entre un serveur et un client (à travers une socket)
+ */
+
 public class Message implements Serializable{
 	
 	private int idSender;
 	public enum TypeMsg {
-		NAME, // Client: "Voici mon nom"
-		ID, // Server: Voici ton id
-		RECHERCHE, // Client: "je veux jouer une partie avec ce format"
-		STARTGAME, // Server: "J'en ai trouvé une, update ton interface"
-		MP, // Client "Retransmet ce MP à client B"
-		REQUETE, // Client: "puis-je jouer ce coup là ?"
-		ORDRE // Server: "Oui. Voici cm update ton interface"
+		NAME, 		// Client: "Voici mon nom"
+		ID, 		// Server: "Voici ton id"
+		RECHERCHE, 	// Client: "je veux jouer une partie avec ce format"
+		STARTGAME, 	// Server: "J'en ai trouvé une, update ton interface"
+		MP, 		// Client: "Retransmet ce MP à client B"
+		REQUETE, 	// Client: "puis-je jouer ce coup là ?"
+		ORDRE 		// Server: "Oui. Voici cm update ton interface"
 	}
 
 	/* 'REQUETE' & 'ORDRE'

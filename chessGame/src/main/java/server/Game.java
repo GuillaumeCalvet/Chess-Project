@@ -9,25 +9,24 @@ import java.util.Random;
 import common.Message;
 
 /*
- Représente une partie d'échec. 
- - Stock toutes les informations de la partie et 
- - gère la logique de déplacements
- => La logique de déplacement est donc traitée server-side
- => En déplacant une pièce, le client fera donc une requête au server
- 	qui renverra (une authorisation ou non).
+ * Représente une partie d'échec. 
+ * => Stock toutes les informations de la partie et gère la logique de déplacements
+ * 	 => La logique de déplacement est donc traitée server-side
+ 	 => En déplacant une pièce, le client fera donc une requête au server
+ 	qui renverra (une authorisation ou non). 
  */
+
 public class Game {
 	
-	private ConnectedClient playerA;
-	private ConnectedClient playerB;
+	private ConnectedClient playerA; // joueur 1
+	private ConnectedClient playerB; // joueur 2
 	private List<ConnectedClient> players;
-	String couleurA, couleurB;
-	private String format;
-	private boolean hasStart;
-	HashMap<Integer, String> piecePositions = new HashMap<>(); 
-	// WHITE'S PERSPECTIVE => 0: black's rook, 63: white's rook
+	String couleurA, couleurB; // "white" / "black"
+	private String format; // format de jeu, ex "3+2" (3 minutes + 2 secondes d'incrément)
+	private boolean hasStart; // la partie a-t-elle commencé ?
+	HashMap<Integer, String> piecePositions = new HashMap<>(); 	// (WHITE'S PERSPECTIVE => 0: black's rook, 63: white's rook)
     // Pour chaque 64 cases: "num_case" => "nom_piece(si existe)"
-    // INITIAL SET UP:
+    // INITIAL SET UP (= comment les pièces sont disposées au début d'une partie)
 	// Key: 0, Value: rook_black
 	// ...
 	// Key: 15, Value: pawn_black
@@ -49,6 +48,7 @@ public class Game {
 		}
 	}
 	
+	// Commencer une partie
 	public void startGame() throws IOException {
 		// Définir qui est noir et blanc
 		Random rand = new Random();
@@ -113,7 +113,8 @@ public class Game {
 	// Analyse ce coup et 
 		// Si ok: retourne un Message aux clients avec les infos pour update leur interface ('GamePane')
 		// Sinon: print error message
-		// Ex: "pawn_white/51/pawn_white/35" => "White: Can I move my pawn from d2 (51st square) to d4 (35th square)"
+		// ex, requestPlayer = "pawn_white/51/pawn_white/35" 
+		// 					    => Can I move my pawn from d2 (51st square) to d4 (35th square)"
 	public void playMove(String requestPlayer, ConnectedClient playerwhoPlayedTheMove) throws IOException {
 
 		if(checkMove(requestPlayer, playerwhoPlayedTheMove)) {
@@ -148,27 +149,44 @@ public class Game {
 	}
 
 	// Checks if a player's move is legal or not
-	// ex, requestPlayer = "pawn_white/51/pawn_white/35" 
-	// 					    => Can I move my pawn from d2 (51st square) to d4 (35th square)"
 	public boolean checkMove(String requestPlayer, ConnectedClient playerwhoPlayedTheMove) {
-		String[] requestSplit = (requestPlayer).split("/");
-		String removePieceName = requestSplit[0];
-		String removePieceColor = removePieceName.split("_")[0];
-		int removeFromPos = 63 - Integer.parseInt(requestSplit[1]);
-		String addPieceName = requestSplit[2]; 
-		int addPieceToPos = 63 - Integer.parseInt(requestSplit[3]);
 
-		if(getColorClient(playerwhoPlayedTheMove) == "black") {
-			removeFromPos = 63 - Integer.parseInt(requestSplit[1]);
-			addPieceToPos = 63 - Integer.parseInt(requestSplit[3]);
-		}
+		String colorPlayer = getColorClient(playerwhoPlayedTheMove);	// "white"
+		String[] requestSplit = (requestPlayer).split("/");		// ["pawn_white", "51", "pawn_white", "35"]
+
+		String removePieceName = requestSplit[0];						// "pawn_white"
+		String removePieceColor = removePieceName.split("_")[1];	// "white"
+		int removeFromPos = 63 - Integer.parseInt(requestSplit[1]);		// 51
 		
+		String addPieceName = requestSplit[2]; 							// "pawn_white"
+		String addPieceColor = addPieceName.split("_")[1];		// "white"
+		int addPieceToPos = 63 - Integer.parseInt(requestSplit[3]);		// 35
+
+		// if( colorPlayer == "black") {
+		// 	removeFromPos = 63 - Integer.parseInt(requestSplit[1]);
+		// 	addPieceToPos = 63 - Integer.parseInt(requestSplit[3]);
+		// }
+
+		if( (colorPlayer == removePieceColor) || (colorPlayer == addPieceColor)) {
+			System.out.println("Cannot remove/add a piece with your opponent's color");
+			return(false);
+		}
+
+		// TO DO (MANQUE DE TEMPS POUR ECRIRE LA LOGIQUE DE DEPLACEMENT), en effet:
+			// Chaque piece ou presque à un déplacement différents
+			// de nombreuses subtilités (pion au 2nd rank peuvent avancer de 2 cases d'un coup + en passant + etc...)
 		return(true);
+
+		// if(removePieceName == "pawn") {
+		// 	if( (((removeFromPos >= 48) && (removeFromPos < 56) ) && colorPlayer == "white") || (((removeFromPos >= 8) && (removeFromPos < 16) ) && colorPlayer == "black")) { // Pawn on 2nd rank
+				
+		// 	}
+		// }
 	}
 	
 	
 	
-	
+	// Ajoute le 2ème joueur à la partie une fois que celui-ci a été trouvé (il n'est pas connu au moment de la création de la partie)
 	public void addPlayerB(ConnectedClient playerB) {
 		this.playerB = playerB;
 		players.add(playerB);
@@ -187,6 +205,7 @@ public class Game {
 		return(hasStart);
 	}
 
+	// Retourne la couleur d'un client
 	public String getColorClient(ConnectedClient client) {
 		if(client.equals(playerA)) {
 			return(couleurA);

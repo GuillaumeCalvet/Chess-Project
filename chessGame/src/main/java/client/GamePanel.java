@@ -32,6 +32,10 @@ import javafx.scene.paint.Paint;
 
 
 
+/*
+ * Scene 3/3 de l'application
+ * => Jeu : affichage du plateau d'échec, du chat, nom des joueurs, etc...
+ */
 public class GamePanel extends Parent{
 	
     SceneSwitchListener sceneSwitchListener;

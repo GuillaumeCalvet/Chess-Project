@@ -8,16 +8,15 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 /*
-COMPILE + LAUNCH:
+LAUNCH FROM CMD:
 >> cd C:\Users\raphg\eclipse-workspace\chessGame\src\main\java
 >> $env:PATH_TO_FX = "C:\Program Files\javafx-sdk-21.0.2\lib"
->?> javac --module-path $env:PATH_TO_FX --add-modules javafx.controls,javafx.graphics,javafx.base $(Get-ChildItem -Recurse -Filter *.java | ForEach-Object { $_.FullName })
->?> javac $(Get-ChildItem -Recurse -Filter *.java | ForEach-Object { $_.FullName })
->?> javac --module-path $env:PATH_TO_FX $(Get-ChildItem -Recurse -Filter *.java | ForEach-Object { $_.FullName })
->> java --module-path $env:PATH_TO_FX --add-modules javafx.controls,javafx.graphics,javafx.base client.MainClient localhost 2024
-
+>> java --module-path $env:PATH_TO_FX --add-modules javafx.controls,javafx.graphics,javafx.fxml client.MainClient localhost 2022 left
 */
 
+/*
+ * Start a client. 
+ */
 
 public class MainClient extends Application implements SceneSwitchListener {
 	

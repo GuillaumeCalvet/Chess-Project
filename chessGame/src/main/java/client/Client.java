@@ -12,6 +12,10 @@ import common.Message.TypeMsg;
 import server.Game;
 import java.util.concurrent.TimeUnit;
 
+/*
+ * Représente un client qui se connectera au serveur 
+ */
+
 public class Client {
 	
 	private String address; // IP server
@@ -39,25 +43,24 @@ public class Client {
 	public void messageReceived(Message mess) {
 		String content = mess.getContent();
 		switch(mess.getType()) {
-			case ID:
+			case ID: // Server: "Voici ton id"
 				setId(Integer.valueOf(content));
 				break;
-			case ORDRE: // "bouge cette piece à tel endroit"
+			case ORDRE: // Server: "bouge cette piece à tel endroit"
 				gamePanel.movePiece(content);
 				break;
-			case STARTGAME:
+			case STARTGAME: // Server: "commence la partie: update ton interface,etc..."
 				while(gamePanel == null) {
 					try {
 						Thread.sleep(50);
-						System.out.println("gamepanel is null");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
 				
 				String[] nameColor = content.split("/"); // Ex: content = "Jeff/white" : the opponent name & color
-				String nameOpp = nameColor[0];   // "Jeff"
-				String colorOpp = nameColor[1];  // "white"
+				String nameOpp = nameColor[0];   			   // "Jeff"
+				String colorOpp = nameColor[1];  			   // "white"
 				gamePanel.setPlayersNames(this.getName(), nameOpp); 
 				gamePanel.setPlayersColors(colorOpp);
 				gamePanel.setUpPieces(gamePanel.getColorPlayerA());
@@ -70,6 +73,7 @@ public class Client {
 		}
 	}
 	
+	// Envoie un message au serveur
 	public void sendMessage(Message mess) throws IOException {
 		out.writeObject(mess);
 		out.flush();
