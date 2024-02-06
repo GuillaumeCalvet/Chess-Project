@@ -151,19 +151,38 @@ public class Game {
 	// ex, requestPlayer = "pawn_white/51/pawn_white/35" 
 	// 					    => Can I move my pawn from d2 (51st square) to d4 (35th square)"
 	public boolean checkMove(String requestPlayer, ConnectedClient playerwhoPlayedTheMove) {
-		String[] requestSplit = (requestPlayer).split("/");
-		String removePieceName = requestSplit[0];
-		String removePieceColor = removePieceName.split("_")[0];
-		int removeFromPos = 63 - Integer.parseInt(requestSplit[1]);
-		String addPieceName = requestSplit[2]; 
-		int addPieceToPos = 63 - Integer.parseInt(requestSplit[3]);
 
-		if(getColorClient(playerwhoPlayedTheMove) == "black") {
-			removeFromPos = 63 - Integer.parseInt(requestSplit[1]);
-			addPieceToPos = 63 - Integer.parseInt(requestSplit[3]);
-		}
+		String colorPlayer = getColorClient(playerwhoPlayedTheMove);	// "white"
+		String[] requestSplit = (requestPlayer).split("/");		// ["pawn_white", "51", "pawn_white", "35"]
+
+		String removePieceName = requestSplit[0];						// "pawn_white"
+		String removePieceColor = removePieceName.split("_")[1];	// "white"
+		int removeFromPos = 63 - Integer.parseInt(requestSplit[1]);		// 51
 		
+		String addPieceName = requestSplit[2]; 							// "pawn_white"
+		String addPieceColor = addPieceName.split("_")[1];		// "white"
+		int addPieceToPos = 63 - Integer.parseInt(requestSplit[3]);		// 35
+
+		// if( colorPlayer == "black") {
+		// 	removeFromPos = 63 - Integer.parseInt(requestSplit[1]);
+		// 	addPieceToPos = 63 - Integer.parseInt(requestSplit[3]);
+		// }
+
+		if( (colorPlayer == removePieceColor) || (colorPlayer == addPieceColor)) {
+			System.out.println("Cannot remove/add a piece with your opponent's color");
+			return(false);
+		}
+
+		// TO DO (MANQUE DE TEMPS POUR ECRIRE LA LOGIQUE DE DEPLACEMENT), en effet:
+			// Chaque piece ou presque à un déplacement différents
+			// de nombreuses subtilités (pion au 2nd rank peuvent avancer de 2 cases d'un coup + en passant + etc...)
 		return(true);
+
+		// if(removePieceName == "pawn") {
+		// 	if( (((removeFromPos >= 48) && (removeFromPos < 56) ) && colorPlayer == "white") || (((removeFromPos >= 8) && (removeFromPos < 16) ) && colorPlayer == "black")) { // Pawn on 2nd rank
+				
+		// 	}
+		// }
 	}
 	
 	
