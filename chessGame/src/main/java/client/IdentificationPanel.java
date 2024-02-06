@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import server.MainBDD;
 
 public class IdentificationPanel extends Parent {
 	
@@ -36,7 +37,9 @@ public class IdentificationPanel extends Parent {
 		sendBtn.setPrefHeight(35);
 		sendBtn.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				MainBDD dbApp = new MainBDD(); // Instanciation de DatabaseApp
 				String name = playerNameToSend.getText();
+				sendBtn.setOnAction(ActionEvent -> dbApp.addUser(name, ""));
 				Message mess = new Message(Message.TypeMsg.NAME, name);
 				try {
 					client.sendMessage(mess);
