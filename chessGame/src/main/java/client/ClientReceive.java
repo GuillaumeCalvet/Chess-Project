@@ -5,6 +5,10 @@ import java.io.ObjectInputStream;
 
 import common.Message;
 
+/*
+ * Thread qui écoute les incoming message du serveur
+ */
+
 public class ClientReceive implements Runnable{
 	
 	Client client;

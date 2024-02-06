@@ -4,14 +4,18 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/*
+ * Gère les connexions de nouveaux clients au serveur
+ */
+
 public class Connection implements Runnable {
 	
 	private Server server;
 	private ServerSocket serverSocket;
 	
 	Connection(Server server) throws IOException {
-		this.server = server;
-		this.serverSocket = new ServerSocket(server.getPort());
+		this.server = server; // référence vers le serveur qui a crée cette connexion
+		this.serverSocket = new ServerSocket(server.getPort()); // permet d'accepter de nouvelles connexions
 		System.out.println("Server is listening on port " + server.getPort() + "...");
 	}
 	

@@ -11,7 +11,10 @@ COMPILE + LAUNCH
 >> java server/MainServer 2024
 */
 
-// Start a server. Reads the server's port from the command line argument
+/*
+ *  Start a server. Reads the server's port from the command line argument
+ */
+
 public class MainServer {
 
 	public static void main(String[] args) {

@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Le serveur de l'application. Responsable des clients et des parties
+ */
+
 public class Server {
 	
-	private int port;
-	private List<ConnectedClient> clients;
-	private List<Game> games;
+	private int port; // Port sur lequel le server écoute les nouvelles connexions
+	private List<ConnectedClient> clients; // Liste des clients connectés
+	private List<Game> games; // Liste des parties crées
 	
 	Server(int port) throws IOException {
 		this.port = port;
